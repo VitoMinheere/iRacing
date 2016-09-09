@@ -9,7 +9,8 @@ angular.module('myApp.view1', ['ngRoute'])
   });
 }])
 
-.controller('View1Ctrl', ['$scope', '$http', function($scope, $http) {
+.controller('View1Ctrl', ['$scope', '$http', 'dataService', 'trackService', 'seriesService', 'carService', function
+    ($scope, $http, dataService, trackService, seriesService, carService) {
 
   $scope.carList = [];
   $scope.trackList = [];
@@ -20,29 +21,17 @@ angular.module('myApp.view1', ['ngRoute'])
   $scope.trackListNames = [];
   $scope.seriesListNames = [];
 
-
-  //TODO cars returns double values
-  $http.get('cars.php').then(function(response){
-    $scope.cars = response.data;
-  });
-
-  $http.get('tracks.php').then(function(response){
-    $scope.tracks = response.data;
-  });
-
-
-  $http.get('series.php').then(function(response) {
-    $scope.series = response.data;
-  });
-
-
+  $scope.races = dataService.getData();
+  $scope.cars = carService.getData();
+  $scope.tracks = trackService.getData();
+  $scope.series = seriesService.getData();
 
   /**
    * Function for adding cars to an array for the SQL query
    * @param car
      */
   $scope.addCar = function (car) {
-    var item = angular.copy(car);
+    var item = angular.copy(parseInt(car));
     $scope.carList.push(item);
 
     //Search the cars array for the car name
@@ -55,7 +44,7 @@ angular.module('myApp.view1', ['ngRoute'])
    * @param track
      */
   $scope.addTrack = function (track) {
-    var item = angular.copy(track);
+    var item = angular.copy(parseInt(track));
     $scope.trackList.push(item);
 
     //Search the tracks array for the track name
@@ -68,7 +57,7 @@ angular.module('myApp.view1', ['ngRoute'])
    * @param series
    */
   $scope.addSeries = function (series) {
-    var item = angular.copy(series);
+    var item = angular.copy(parseInt(series));
     $scope.seriesList.push(item);
 
     var foundSeries = _.find($scope.series,{id: item});
@@ -84,11 +73,53 @@ angular.module('myApp.view1', ['ngRoute'])
    * Take the selected cars, tracks and class and create the query
    */
   $scope.getSeries = function () {
+    var usedLists = [];
+    var query = [{car: $scope.carList}, {track: $scope.trackList}, {class: $scope.classList}, {series: $scope.seriesList}];
+    query.forEach(function (item){
+      console.log(item);
+      if (item.length > 0){
+        usedLists.push(item);
+        console.log(usedLists);
+      }
+
+    });
+
+    /*
+    if ($scope.carList.length > 0 ||
+        $scope.trackList.length > 0 ||
+        $scope.seriesList.length > 0 ||
+        $scope.classList.length > 0
+    ){
+
+    }
+    if ($scope.trackList.length > 0 ||
+        $scope.seriesList.length > 0 ||
+        $scope.classList.length > 0
+    ){
+
+    }
+    if ($scope.carList.length > 0 ||
+        $scope.seriesList.length > 0 ||
+        $scope.classList.length > 0
+    ){
+
+    }
+    if ($scope.carList.length > 0 ||
+        $scope.trackList.length > 0 ||
+        $scope.seriesList.length > 0 ||
+        $scope.classList.length > 0
+    ){
+
+    }
+    */
+
+
+    /*
     $http.get('query.php',
         {
           params: {
             "cars": $scope.carList.toString(),
-            "tracks": $scope.trackList.toString()
+            //"tracks": $scope.trackList.toString()
             //"series": $scope.seriesList.toString(),
             //"class": $scope.classList.toString()
           }
@@ -96,6 +127,7 @@ angular.module('myApp.view1', ['ngRoute'])
     ).then(function(response){
       $scope.data = response.data;
     });
+    */
   };
 
   /**

@@ -6,13 +6,13 @@
             <thead>
             <th>Cars
                 <select data-ng-model="formData.car" data-ng-change="addCar(formData.car)">
-                    <option data-ng-repeat="item in cars  | orderBy: 'car_name'" value="{{item.id}}"> {{item.car_name}}</option>
+                    <option data-ng-repeat="item in cars  | orderBy: 'name'" value="{{item.id}}"> {{item.name}}</option>
                 </select>
             </th>
             </thead>
             <tbody >
             <tr data-ng-repeat="item in carListNames">
-                <td>{{item.car_name}}</td>
+                <td>{{item.name}}</td>
                 <td><button data-ng-click="removeItem(item, 'cars')">X</button></td>
             </tr>
             </tbody>
@@ -27,13 +27,13 @@
             <th>
                 Tracks
                 <select data-ng-model="formData.track" data-ng-change="addTrack(formData.track)">
-                    <option data-ng-repeat="item in tracks | orderBy: 'track_name'" value="{{item.id}}"> {{item.track_name}}</option>
+                    <option data-ng-repeat="item in tracks | orderBy: 'name'" value="{{item.id}}"> {{item.name}}</option>
                 </select>
             </th>
             </thead>
             <tbody>
             <tr data-ng-repeat="item in trackListNames">
-                <td>{{item.track_name}}</td>
+                <td>{{item.name}}</td>
                 <td><button data-ng-click="removeItem(item , 'tracks')">X</button></td>
             </tr>
             </tbody>
@@ -48,13 +48,13 @@
             <th>
                 Series
                 <select data-ng-model="formData.series" data-ng-change="addSeries(formData.series)">
-                    <option data-ng-repeat="item in series  | orderBy: 'series_name'" value="{{item.id}}"> {{item.series_name}}</option>
+                    <option data-ng-repeat="item in series  | orderBy: 'name'" value="{{item.id}}"> {{item.name}}</option>
                 </select>
             </th>
             </thead>
             <tbody>
             <tr data-ng-repeat="item in seriesListNames">
-                <td>{{item.series_name}}</td>
+                <td>{{item.name}}</td>
                 <td><button data-ng-click="removeItem(item, 'series')">X</button></td>
             </tr>
             </tbody>

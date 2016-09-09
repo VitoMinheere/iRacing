@@ -5,18 +5,11 @@ if ($connection->connect_error) {
     die("Connection failed: " . $connection->connect_error);
 }
 
-$tracks = $_GET['tracks'];
+//$tracks = $_GET['tracks'];
 $cars = $_GET['cars'];
-$series = '';
-$class = '';
+//$series = '';
+//$class = $_GET['class'];
 
-if (!isset($_GET['class'])) {
-    $class = '';
-}
-
-if (!isset($_GET['series'])) {
-    $series = '';
-}
 
 $query =  " SELECT  *
 			FROM 2016s4
@@ -27,7 +20,7 @@ $query =  " SELECT  *
 			JOIN series
 			ON  series.id = 2016s4.series
 		    WHERE car IN ($cars)
-		    AND track IN ($tracks)
+
 
 
 			"; //You don't need a ; like you do in SQL
@@ -47,6 +40,12 @@ if(mysqli_num_rows($result) > 0){
 } else {
     echo 0;
 };
+
+$fp = fopen('php://output', 'w');
+while($row = mysqli_fetch_assoc($result)){
+    fputcsv($fp, $row);
+}
+fclose($fp);
 
 if (isset($data)){
 header('Content-Type: application/json');
