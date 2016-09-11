@@ -89,7 +89,17 @@
     </div>
     </div>
 
-    <div class="col-md-4">Date picker</div>
+    <div class="col-md-4 panel panel-default">
+        <div class="form-group panel-body">
+            <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range</label><br>
+            <div class="form-group col-xs-6">
+                <input type="text" class="form-control" ng-model="fromDate" data-min-date="09/13/16" data-max-date="12/06/2016" placeholder="From" bs-datepicker>
+            </div>
+            <div class="form-group col-xs-6">
+                <input type="text" class="form-control" ng-model="untilDate" data-min-date="09/19/2016" data-max-date="12/12/2016" placeholder="Until" bs-datepicker>
+            </div>
+        </div>
+        </div>
 
     <div class="col-md-4">
         <button data-ng-click="getSeries()">Click</button>
@@ -111,14 +121,14 @@
             <th>Type</th>
         </thead>
         <tbody>
-            <tr data-ng-repeat="item in data track by $index">
+            <tr data-ng-repeat="item in result track by $index">
                 <td>{{item.type}}</td>
                 <td>{{item.class}}</td>
-                <td>{{item.car_name}}</td>
-                <td>{{item.series_name}}</td>
+                <td>{{item.car}}</td>
+                <td>{{item.series}}</td>
                 <td>{{item.start_date}}</td>
                 <td>{{item.end_date}}</td>
-                <td>{{item.track_name}}</td>
+                <td>{{item.track}}</td>
                 <td>{{item.official_type}}</td>
             </tr>
         </tbody>

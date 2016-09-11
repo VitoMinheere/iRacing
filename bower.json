@@ -1,14 +1,24 @@
 {
-  "name": "iRacing app",
+  "name": "iRacing-app",
   "description": "iRacing database",
-  "version": "0.0.0",
-  "homepage": "https://github.com/BosshoggDBB/iRacing.git",
-  "private": true,
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ],
   "dependencies": {
-    "angular": "~1.5.0",
-    "angular-route": "~1.5.0",
     "angular-loader": "~1.5.0",
     "angular-mocks": "~1.5.0",
-    "html5-boilerplate": "^5.3.0"
+    "angular-route": "~1.5.0",
+    "html5-boilerplate": "^5.3.0",
+    "bootstrap": "^3.3.7",
+    "angular-strap": "^2.3.9",
+    "underscore": "^1.8.3"
   }
 }

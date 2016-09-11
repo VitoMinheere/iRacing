@@ -70,64 +70,40 @@ angular.module('myApp.view1', ['ngRoute'])
   };
 
   /**
-   * Take the selected cars, tracks and class and create the query
+   * Take the selected cars, tracks , series and class and create the query
    */
   $scope.getSeries = function () {
-    var usedLists = [];
-    var query = [{car: $scope.carList}, {track: $scope.trackList}, {class: $scope.classList}, {series: $scope.seriesList}];
-    query.forEach(function (item){
-      console.log(item);
-      if (item.length > 0){
-        usedLists.push(item);
-        console.log(usedLists);
-      }
-
-    });
-
-    /*
-    if ($scope.carList.length > 0 ||
-        $scope.trackList.length > 0 ||
-        $scope.seriesList.length > 0 ||
-        $scope.classList.length > 0
-    ){
-
+    $scope.foundCars = [];
+    $scope.foundTracks = [];
+    $scope.foundSeries = [];
+    if ($scope.carListNames.length > 0){
+      $scope.carListNames.forEach(function (item){
+        // Search for all the races with the same car
+        var car = _.filter($scope.races, function(list){return list.car == item.name});
+        // Push the races into an array
+        $scope.foundCars.push(car);
+        //Concat the multidimensional array of foundCars
+        $scope.foundCars = [].concat.apply([], $scope.foundCars);
+      });
     }
-    if ($scope.trackList.length > 0 ||
-        $scope.seriesList.length > 0 ||
-        $scope.classList.length > 0
-    ){
-
+    if ($scope.trackListNames.length > 0){
+      $scope.trackListNames.forEach(function (item){
+        var track = _.filter($scope.races, function(list){return list.track == item.name});
+        $scope.foundTracks.push(track);
+        $scope.foundTracks = [].concat.apply([], $scope.foundTracks);
+      })
     }
-    if ($scope.carList.length > 0 ||
-        $scope.seriesList.length > 0 ||
-        $scope.classList.length > 0
-    ){
-
+    if ($scope.seriesListNames.length > 0){
+      $scope.seriesListNames.forEach(function (item){
+        var series = _.filter($scope.races, function(list){return list.series == item.name});
+        $scope.foundSeries.push(series);
+        $scope.foundSeries = [].concat.apply([], $scope.foundSeries);
+      })
     }
-    if ($scope.carList.length > 0 ||
-        $scope.trackList.length > 0 ||
-        $scope.seriesList.length > 0 ||
-        $scope.classList.length > 0
-    ){
-
-    }
-    */
+    $scope.result = [].concat($scope.foundCars, $scope.foundTracks, $scope.foundSeries);
 
 
-    /*
-    $http.get('query.php',
-        {
-          params: {
-            "cars": $scope.carList.toString(),
-            //"tracks": $scope.trackList.toString()
-            //"series": $scope.seriesList.toString(),
-            //"class": $scope.classList.toString()
-          }
-        }
-    ).then(function(response){
-      $scope.data = response.data;
-    });
-    */
+
   };
 
   /**
