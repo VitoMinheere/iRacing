@@ -70,6 +70,53 @@ angular.module('myApp.view1', ['ngRoute'])
         };
 
         /**
+         * Add all the free cars
+         */
+        $scope.addFreeCars = function (){
+            // Get the free cars
+            var freeCars = _.filter($scope.cars, function(item){
+                return item.name == "Cadillac CTS-V" ||
+                    item.name == "Mazda MX-5 Cup" ||
+                    item.name == "Dallara DW12 Indycar" ||
+                    item.name == "JR Motorsports Street Stock" ||
+                    item.name == "Legends Ford 1934 Coupe" ||
+                    item.name == "Pontiac Solstice ClubSport" ||
+                    item.name == "SCCA Spec Racer Ford"
+            });
+            freeCars.forEach(function (car){
+                $scope.carList.push(car.id);
+                $scope.carListNames.push(car);
+            })
+            };
+
+
+        /**
+         * Add all the free tracks
+         */
+        $scope.addFreeTracks = function () {
+            // Get the free cars
+            var freeTracks = _.filter($scope.tracks, function(item){
+                return item.name == "Charlotte Motor Speedway" ||
+                    item.name == "Mazda Raceway Laguna Seca" ||
+                    item.name == "Summit Point Motorsports Park" ||
+                    item.name == "Okayama International Circuit	" ||
+                    item.name == "Concord Speedway" ||
+                    item.name == "Daytona circa 2007" ||
+                    item.name == "Lanier International Speedway" ||
+                    item.name == "Oxford Plains Speedway" ||
+                    item.name == "Phoenix International Raceway circa 2008" ||
+                    item.name == "South Boston Speedway" ||
+                    item.name == "Thompson International Speedway" ||
+                    item.name == "USA International Speedway" ||
+                    item.name == "Lime Rock Park"
+            });
+            freeTracks.forEach(function (track){
+                $scope.trackList.push(track.id);
+                $scope.trackListNames.push(track);
+            })
+        };
+
+        /**
          * Take the selected cars, tracks , series and class and create the query
          */
         $scope.getSeries = function () {
@@ -110,37 +157,53 @@ angular.module('myApp.view1', ['ngRoute'])
             $scope.result = [].concat(foundCars, foundTracks, foundSeries);
 
 
-            if(foundCars.length > 0) {
-                var list = [];
-                // For every selected car
-                foundCars.forEach(function (item) {
-                    // If more than 1 lists are selected
-                    if (foundTracks.length > 0) {
-                        foundTracks.forEach(function(track){
-                            var X = _.filter(foundCars, {track: track.track});
-                            list.push(X);
-                            $scope.result = [].concat.apply([], list);
-                        })
-                    }
-                    // If series are also selected
-                    if (foundSeries.length > 0) {
-                        foundSeries.forEach(function (series){
-                            var X = _.filter(foundCars, {series: series.series});
-                            list.push(X);
-                            $scope.result = [].concat.apply([], list);
-                        })
-                    }
-                    // If class is also selected
-                    if ($scope.classList.length > 0) {
-                        $scope.classList.forEach(function (selected){
-                            $scope.result = _.filter($scope.result, {class: selected});
-                        })
-                    } else {
-                        return $scope.result;
-                    }
+            var list = [];
+            // If any of the found arrays are filled
+            if (foundCars.length > 0) {
+                // Only iterate the amount of selected cars
+                $scope.carListNames.forEach(function (item) {
+                    var car = _.filter($scope.result, function (list) {
+                        return list.car == item.name
+                    });
+                    list.push(car);
                 });
+                // Concatenate the multi dimensional arrays and remove duplicate entries
+                $scope.result = _.uniq([].concat.apply([], list));
+            }
+            if (foundTracks.length > 0) {
+                list = [];
+                $scope.trackListNames.forEach(function (item) {
+                    var track = _.filter($scope.result, function (list) {
+                        return list.track == item.name
+                    });
+                    list.push(track);
+                });
+                $scope.result = _.uniq([].concat.apply([], list));
+            }
+            // If series are also selected
+            if (foundSeries.length > 0) {
+                list = [];
+                $scope.seriesListNames.forEach(function (item) {
+                    var series = _.filter($scope.result, function (list) {
+                        return list.series == item.name
+                    });
+                    list.push(series);
+                });
+                $scope.result = _.uniq([].concat.apply([], list));
+            }
+            // If class is also selected
+            if ($scope.classList.length > 0) {
+                list = [];
+                $scope.classList.forEach(function (item) {
+                    var classes = _.filter($scope.result, function (list) {
+                        return list.class == item
+                    });
+                    list.push(classes);
+                });
+                $scope.result = _.uniq([].concat.apply([], list));
             }
         };
+
 
         /**
          * Remove the selected item from the list
@@ -165,6 +228,7 @@ angular.module('myApp.view1', ['ngRoute'])
             }
         };
 
+
         /**
          * Clear all lists
          */
@@ -177,5 +241,8 @@ angular.module('myApp.view1', ['ngRoute'])
             $scope.carListNames = [];
             $scope.trackListNames = [];
             $scope.seriesListNames = [];
+
+            //Clear the select fields
+            $scope.formData = {};
         }
     }]);
