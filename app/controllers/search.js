@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('myApp.view1', ['ngRoute'])
+angular.module('myApp.search', ['ngRoute'])
 
     .config(['$routeProvider', function ($routeProvider) {
-        $routeProvider.when('/view1', {
-            templateUrl: 'view1/view1.html',
-            controller: 'View1Ctrl'
+        $routeProvider.when('/search', {
+            templateUrl: 'views/search.html',
+            controller: 'searchCtrl'
         });
     }])
 
-    .controller('View1Ctrl', ['$scope', '$http', 'dataService', 'trackService', 'seriesService', 'carService', function
+    .controller('searchCtrl', ['$scope', '$http', 'dataService', 'trackService', 'seriesService', 'carService', function
         ($scope, $http, dataService, trackService, seriesService, carService) {
 
         $scope.carList = [];
@@ -26,6 +26,7 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.tracks = trackService.getData();
         $scope.series = seriesService.getData();
 
+        //TODO check if item is already in the selected items array to avoid repeater errors
         /**
          * Function for adding cars to an array for the SQL query
          * @param car
