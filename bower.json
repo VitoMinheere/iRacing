@@ -19,6 +19,7 @@
     "html5-boilerplate": "^5.3.0",
     "bootstrap": "^3.3.7",
     "angular-strap": "^2.3.9",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "moment": "^2.15.0"
   }
 }
