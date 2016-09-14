@@ -26,18 +26,27 @@ angular.module('myApp.search', ['ngRoute'])
         $scope.tracks = trackService.getData();
         $scope.series = seriesService.getData();
 
-        //TODO check if item is already in the selected items array to avoid repeater errors
+        //Set type filter checkboxes to true
+        //TODO use xpeppermint ui switch
+        $scope.formData = {type:{road: true, oval:true}};
+
+
         /**
          * Function for adding cars to an array for the SQL query
          * @param car
          */
         $scope.addCar = function (car) {
             var item = angular.copy(parseInt(car));
-            $scope.carList.push(item);
 
-            //Search the cars array for the car name
-            var foundCar = _.find($scope.cars, {id: item});
-            $scope.carListNames.push(foundCar);
+            if ($scope.carList.indexOf(item) == -1) {
+                $scope.carList.push(item);
+
+                //Search the cars array for the car name
+                var foundCar = _.find($scope.cars, {id: item});
+                $scope.carListNames.push(foundCar);
+                // Empty form data after adding the car so that the select is empty again
+                $scope.formData.car = {};
+            }
         };
 
         /**
@@ -46,11 +55,14 @@ angular.module('myApp.search', ['ngRoute'])
          */
         $scope.addTrack = function (track) {
             var item = angular.copy(parseInt(track));
-            $scope.trackList.push(item);
+            if ($scope.trackList.indexOf(item) == -1) {
+                $scope.trackList.push(item);
 
-            //Search the tracks array for the track name
-            var foundTrack = _.find($scope.tracks, {id: item});
-            $scope.trackListNames.push(foundTrack);
+                //Search the tracks array for the track name
+                var foundTrack = _.find($scope.tracks, {id: item});
+                $scope.trackListNames.push(foundTrack);
+                $scope.formData.track = {};
+            }
         };
 
         /**
@@ -59,15 +71,21 @@ angular.module('myApp.search', ['ngRoute'])
          */
         $scope.addSeries = function (series) {
             var item = angular.copy(parseInt(series));
-            $scope.seriesList.push(item);
+            if ($scope.seriesList.indexOf(item) == -1) {
+                $scope.seriesList.push(item);
 
-            var foundSeries = _.find($scope.series, {id: item});
-            $scope.seriesListNames.push(foundSeries);
+                var foundSeries = _.find($scope.series, {id: item});
+                $scope.seriesListNames.push(foundSeries);
+                $scope.formData.series = {};
+            }
         };
 
         $scope.addClass = function (data) {
             var item = angular.copy(data);
-            $scope.classList.push(item);
+            if ($scope.classList.indexOf(item) == -1) {
+                $scope.classList.push(item);
+                $scope.formData.class = {};
+            }
         };
 
         /**
@@ -154,7 +172,6 @@ angular.module('myApp.search', ['ngRoute'])
                     foundSeries = [].concat.apply([], foundSeries);
                 })
             }
-
             $scope.result = [].concat(foundCars, foundTracks, foundSeries);
 
 
@@ -203,6 +220,31 @@ angular.module('myApp.search', ['ngRoute'])
                 });
                 $scope.result = _.uniq([].concat.apply([], list));
             }
+            // if a week is selected
+            if ($scope.formData.week) {
+                var weeks = _.values($scope.formData.week);
+                list = [];
+                weeks.forEach(function (item) {
+                    var races = _.filter($scope.result, function (list) {
+                        return list.start_date == item
+                    });
+                    list.push(races);
+                });
+                $scope.result = _.uniq([].concat.apply([], list));
+            }
+            // Filter the results on type
+            if($scope.formData.type.oval == true || $scope.formData.type.road == true)
+                list = [];
+            if ($scope.formData.type.oval == true) {
+
+                var oval = _.filter($scope.result, {type: 'Oval'});
+                list.push(oval);
+            }
+            if ($scope.formData.type.road == true) {
+                var road = _.filter($scope.result, {type: 'Road'});
+                list.push(road);
+            }
+            $scope.result = _.uniq([].concat.apply([], list));
         };
 
 
@@ -245,5 +287,7 @@ angular.module('myApp.search', ['ngRoute'])
 
             //Clear the select fields
             $scope.formData = {};
+            //Reset the checkboxes
+            $scope.formData = {type:{road: true, oval:true}};
         }
     }]);

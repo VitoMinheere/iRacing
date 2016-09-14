@@ -1,5 +1,8 @@
+
+<title>iRacing Database</title>
 <div class="jumbotron text-center">
     <h3>iRacing database</h3>
+    <h5>Season 4 - 2016</h5>
     <small>{{ 'v%VERSION%.' | interpolate }}</small>
 </div>
 <div class="col-md-12">
@@ -45,7 +48,7 @@
     </div>
 
     <div class="col-md-4">
-        <button class="btn btn-block btn-success" style="display:block" data-ng-click="getSeries()">Click</button>
+        <button class="btn btn-block btn-success" style="display:block" data-ng-click="getSeries()">Search</button>
         <button class="btn btn-block btn-success" style="display:block" data-ng-click="addFreeCars()">Add free cars</button>
         <button class="btn btn-block btn-success" style="display:block" data-ng-click="addFreeTracks()">Add free tracks</button>
         <button class="btn btn-block btn-warning" data-ng-click="clearAll()">Clear all</button>
@@ -100,19 +103,36 @@
     </div>
     </div>
 
-    <div class="col-md-4 panel panel-default">
-        <div class=" panel-body" style="height:300px;">
-            <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i> <i class="fa fa-calendar"></i> Date range</label><br>
-            <div class="form-group col-xs-6">
-                <input type="text" class="form-control" ng-model="fromDate" data-min-date="09/13/16" data-max-date="12/06/2016" placeholder="From"
-                       data-date-format="dd-MM-yyyy" bs-datepicker>
-            </div>
-            <div class="form-group col-xs-6">
-                <input type="text" class="form-control" ng-model="untilDate" data-min-date="09/19/2016" data-max-date="12/12/2016" placeholder="Until"
-                       data-placement="left-bottom" data-date-format="dd-MM-yyyy" bs-datepicker>
-            </div>
+    <div class="col-md-4 panel panel-default" style="height:300px;overflow:auto;">
+        <h3>Filters</h3>
+        <h5 class="panel panel-body" style="display:block;color:white;background-color: cornflowerblue" data-ng-click="showTypes = ! showTypes">Type</h5>
+        <div  data-ng-show="showTypes">
+            <input type="checkbox" ng-model="formData.type.oval" >Oval<br>
+            <input type="checkbox" ng-model="formData.type.road" >Road<br>
+        </div>
+
+        <div>
+        <h5 class="panel panel-body " style="display:block;color:white;background-color: cornflowerblue" data-ng-click="showWeeks = ! showWeeks">Weeks</h5>
+        <div class="col-md-6 form-group" data-ng-show="showWeeks">
+            <input type="checkbox" name="week1" ng-model="formData.week.week1" ng-true-value="'13-09-16'">Week 1<br>
+            <input type="checkbox" name="week2" ng-model="formData.week.week2" ng-true-value="'20-09-16'">Week 2<br>
+            <input type="checkbox" name="week3" ng-model="formData.week.week3" ng-true-value="'27-09-16'">Week 3<br>
+            <input type="checkbox" name="week4" ng-model="formData.week.week4" ng-true-value="'4-10-16'">Week 4<br>
+            <input type="checkbox" name="week5" ng-model="formData.week.week5" ng-true-value="'11-10-16'">Week 5<br>
+            <input type="checkbox" name="week6" ng-model="formData.week.week6" ng-true-value="'18-10-16'">Week 6<br>
+        </div>
+        <div class="col-md-6 form-group" data-ng-show="showWeeks">
+            <input type="checkbox" name="week7" ng-model="formData.week.week7" ng-true-value="'25-10-16'">Week 7<br>
+            <input type="checkbox" name="week8" ng-model="formData.week.week8" ng-true-value="'1-11-16'">Week 8<br>
+            <input type="checkbox" name="week9" ng-model="formData.week.week9" ng-true-value="'8-11-16'">Week 9<br>
+            <input type="checkbox" name="week10" ng-model="formData.week.week10" ng-true-value="'15-11-16'">Week 10<br>
+            <input type="checkbox" name="week11" ng-model="formData.week.week11" ng-true-value="'22-11-16'">Week 11<br>
+            <input type="checkbox" name="week12" ng-model="formData.week.week12" ng-true-value="'29-11-16'">Week 12<br>
+            <input type="checkbox" name="week13" ng-model="formData.week.week13" ng-true-value="'6-12-16'">Week 13<br>
         </div>
         </div>
+    </div>
+    </div>
 
 
 
