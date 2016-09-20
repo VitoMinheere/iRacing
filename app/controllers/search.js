@@ -96,7 +96,7 @@ angular.module('myApp.search', ['ngRoute'])
             var freeCars = _.filter($scope.cars, function(item){
                 return item.name == "Cadillac CTS-V" ||
                     item.name == "Mazda MX-5 Cup" ||
-                    item.name == "Dallara DW12 Indycar" ||
+                    item.name == "Dallara Indycar (circa 2011)" ||
                     item.name == "JR Motorsports Street Stock" ||
                     item.name == "Legends Ford 1934 Coupe" ||
                     item.name == "Pontiac Solstice ClubSport" ||

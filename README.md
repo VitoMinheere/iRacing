@@ -1,4 +1,4 @@
-# iRacing calendar
+# iRacing database
 
 Use this web app to find out which cars or tracks you need to buy to race the most this season
 
