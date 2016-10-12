@@ -12,14 +12,17 @@ angular.module('myApp.search', ['ngRoute'])
     .controller('searchCtrl', ['$scope', '$http', 'dataService', 'trackService', 'seriesService', 'carService', function
         ($scope, $http, dataService, trackService, seriesService, carService) {
 
-        $scope.carList = [];
-        $scope.trackList = [];
-        $scope.seriesList = [];
-        $scope.classList = [];
+        // Array for the ListNames
+        $scope.lists = {};
 
         $scope.carListNames = [];
         $scope.trackListNames = [];
         $scope.seriesListNames = [];
+
+        $scope.carListNames.push({value: "car"});
+        $scope.trackListNames.push({value: "track"});
+        $scope.seriesListNames.push({value: "series"});
+
 
         $scope.races = dataService.getData();
         $scope.cars = carService.getData();
@@ -30,23 +33,22 @@ angular.module('myApp.search', ['ngRoute'])
         //TODO use xpeppermint ui switch
         $scope.formData = {type:{road: true, oval:true}};
 
+        // Sorting the results
+        $scope.sortType     = 'start_date'; // set the default sort type
+        $scope.sortReverse  = false;  // set the default sort order
+        $scope.filter = {};
+        $scope.filter.searchValue = "";
+
 
         /**
          * Function for adding cars to an array for the SQL query
          * @param car
          */
         $scope.addCar = function (car) {
-            var item = angular.copy(parseInt(car));
-
-            if ($scope.carList.indexOf(item) == -1) {
-                $scope.carList.push(item);
-
-                //Search the cars array for the car name
-                var foundCar = _.find($scope.cars, {id: item});
-                $scope.carListNames.push(foundCar);
-                // Empty form data after adding the car so that the select is empty again
-                $scope.formData.car = {};
+            if ($scope.carListNames.indexOf(car) == -1) {
+                $scope.carListNames.push(car);
             }
+            $scope.formData.car = {};
         };
 
         /**
@@ -54,15 +56,10 @@ angular.module('myApp.search', ['ngRoute'])
          * @param track
          */
         $scope.addTrack = function (track) {
-            var item = angular.copy(parseInt(track));
-            if ($scope.trackList.indexOf(item) == -1) {
-                $scope.trackList.push(item);
-
-                //Search the tracks array for the track name
-                var foundTrack = _.find($scope.tracks, {id: item});
-                $scope.trackListNames.push(foundTrack);
-                $scope.formData.track = {};
+            if ($scope.trackListNames.indexOf(track) == -1) {
+                $scope.trackListNames.push(track);
             }
+            $scope.formData.track = {};
         };
 
         /**
@@ -70,20 +67,16 @@ angular.module('myApp.search', ['ngRoute'])
          * @param series
          */
         $scope.addSeries = function (series) {
-            var item = angular.copy(parseInt(series));
-            if ($scope.seriesList.indexOf(item) == -1) {
-                $scope.seriesList.push(item);
-
-                var foundSeries = _.find($scope.series, {id: item});
-                $scope.seriesListNames.push(foundSeries);
-                $scope.formData.series = {};
+            if ($scope.seriesListNames.indexOf(series) == -1){
+                $scope.seriesListNames.push(series);
             }
+            $scope.formData.series = {};
         };
 
         $scope.addClass = function (data) {
             var item = angular.copy(data);
-            if ($scope.classList.indexOf(item) == -1) {
-                $scope.classList.push(item);
+            if ($scope.lists.classList.indexOf(item) == -1) {
+                $scope.lists.classList.push(item);
                 $scope.formData.class = {};
             }
         };
@@ -103,7 +96,6 @@ angular.module('myApp.search', ['ngRoute'])
                     item.name == "SCCA Spec Racer Ford"
             });
             freeCars.forEach(function (car){
-                $scope.carList.push(car.id);
                 $scope.carListNames.push(car);
             })
             };
@@ -130,7 +122,6 @@ angular.module('myApp.search', ['ngRoute'])
                     item.name == "Lime Rock Park"
             });
             freeTracks.forEach(function (track){
-                $scope.trackList.push(track.id);
                 $scope.trackListNames.push(track);
             })
         };
@@ -139,41 +130,53 @@ angular.module('myApp.search', ['ngRoute'])
          * Take the selected cars, tracks , series and class and create the query
          */
         $scope.getSeries = function () {
-            var foundCars = [];
-            var foundTracks = [];
-            var foundSeries = [];
-            if ($scope.carListNames.length > 0) {
-                $scope.carListNames.forEach(function (item) {
-                    // Search for all the races with the same car
-                    var car = _.filter($scope.races, function (list) {
-                        return list.car == item.name
-                    });
-                    // Push the races into an array
-                    foundCars.push(car);
-                    //Concat the multidimensional array of foundCars
-                    foundCars = [].concat.apply([], foundCars);
-                });
-            }
-            if ($scope.trackListNames.length > 0) {
-                $scope.trackListNames.forEach(function (item) {
-                    var track = _.filter($scope.races, function (list) {
-                        return list.track == item.name
-                    });
-                    foundTracks.push(track);
-                    foundTracks = [].concat.apply([], foundTracks);
-                })
-            }
-            if ($scope.seriesListNames.length > 0) {
-                $scope.seriesListNames.forEach(function (item) {
-                    var series = _.filter($scope.races, function (list) {
-                        return list.series == item.name
-                    });
-                    foundSeries.push(series);
-                    foundSeries = [].concat.apply([], foundSeries);
-                })
-            }
-            $scope.result = [].concat(foundCars, foundTracks, foundSeries);
+            var foundItems = [];
+            var resultItems = [];
+            var filteredItems = [];
 
+            $scope.lists.cars = angular.copy($scope.carListNames);
+            $scope.lists.tracks = angular.copy($scope.trackListNames);
+            $scope.lists.series = angular.copy($scope.seriesListNames);
+
+            _.each($scope.lists, function(array){
+                array.forEach(function(selected){
+                    if (selected.name) {
+                        console.log(selected);
+                        var item = _.filter($scope.races, function (list) {
+                            if (array[0].value !== undefined) {
+                                return list[array[0].value] == selected.name;
+                            }
+                        });
+                        foundItems.push(item);
+                    }
+                });
+
+            });
+            foundItems = _.uniq([].concat.apply([],foundItems));
+            console.log(foundItems);
+
+            $scope.result = foundItems;
+
+            /**
+            _.each($scope.lists, function(array){
+                array.forEach(function(selected){
+                    var item = _.filter($scope.result, function(list){
+                        if(array[0].value !== undefined && selected.name) {
+                            console.log(selected.name);
+                            return list[array[0].value] == selected.name;
+                        }
+                    });
+                    resultItems.push(item);
+                    //console.log(resultItems);
+                });
+                filteredItems = _.uniq([].concat.apply([], resultItems));
+
+            });
+            console.log(filteredItems);
+            $scope.result = _.uniq([].concat.apply([], filteredItems));
+
+             **/
+            /**
 
             var list = [];
             // If any of the found arrays are filled
@@ -210,9 +213,9 @@ angular.module('myApp.search', ['ngRoute'])
                 $scope.result = _.uniq([].concat.apply([], list));
             }
             // If class is also selected
-            if ($scope.classList.length > 0) {
+            if ($scope.lists.classList.length > 0) {
                 list = [];
-                $scope.classList.forEach(function (item) {
+                $scope.lists.classList.forEach(function (item) {
                     var classes = _.filter($scope.result, function (list) {
                         return list.class == item
                     });
@@ -236,7 +239,6 @@ angular.module('myApp.search', ['ngRoute'])
             if($scope.formData.type.oval == true || $scope.formData.type.road == true)
                 list = [];
             if ($scope.formData.type.oval == true) {
-
                 var oval = _.filter($scope.result, {type: 'Oval'});
                 list.push(oval);
             }
@@ -245,7 +247,9 @@ angular.module('myApp.search', ['ngRoute'])
                 list.push(road);
             }
             $scope.result = _.uniq([].concat.apply([], list));
+             */
         };
+
 
 
         /**
@@ -256,18 +260,18 @@ angular.module('myApp.search', ['ngRoute'])
         $scope.removeItem = function (item, array) {
             if (array == 'cars') {
                 $scope.carListNames = _.without($scope.carListNames, item);
-                $scope.carList = _.without($scope.carList, item.id);
+                $scope.lists.carList = _.without($scope.lists.carList, item.id);
             }
             if (array == 'tracks') {
                 $scope.trackListNames = _.without($scope.trackListNames, item);
-                $scope.trackList = _.without($scope.trackList, item.id);
+                $scope.lists.trackList = _.without($scope.lists.trackList, item.id);
             }
             if (array == 'series') {
                 $scope.seriesListNames = _.without($scope.seriesListNames, item);
-                $scope.seriesList = _.without($scope.seriesList, item.id);
+                $scope.lists.seriesList = _.without($scope.lists.seriesList, item.id);
             }
             if (array == 'class') {
-                $scope.classList = _.without($scope.classList, item);
+                $scope.lists.classList = _.without($scope.lists.classList, item);
             }
         };
 
@@ -276,10 +280,10 @@ angular.module('myApp.search', ['ngRoute'])
          * Clear all lists
          */
         $scope.clearAll = function () {
-            $scope.carList = [];
-            $scope.trackList = [];
-            $scope.seriesList = [];
-            $scope.classList = [];
+            $scope.lists.carList = [];
+            $scope.lists.trackList = [];
+            $scope.lists.seriesList = [];
+            $scope.lists.classList = [];
 
             $scope.carListNames = [];
             $scope.trackListNames = [];
