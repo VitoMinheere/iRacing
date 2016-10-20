@@ -11,15 +11,16 @@
         <table class="table table-striped">
             <thead>
             <th>Cars
-                <select data-ng-model="formData.car" data-ng-change="addCar(formData.car)">
-                    <option data-ng-repeat="item in cars  | orderBy: 'name'" value="{{item.id}}"> {{item.name}}</option>
+                <select data-ng-model="formData.car"
+                        data-ng-options="item.name for item in cars  | orderBy: 'name'"
+                        data-ng-change="addCar(formData.car)">
                 </select>
             </th>
             </thead>
             <tbody >
-            <tr data-ng-repeat="item in carListNames">
-                <td>{{item.name}}</td>
-                <td><button data-ng-click="removeItem(item, 'cars')">X</button></td>
+            <tr data-ng-repeat="item in carListNames  ">
+                <td data-ng-hide="item.value">{{item.name}}</td>
+                <td data-ng-hide="item.value"><button data-ng-click="removeItem(item, 'cars')">X</button></td>
             </tr>
             </tbody>
         </table>
@@ -32,15 +33,17 @@
             <thead>
             <th>
                 Tracks
-                <select data-ng-model="formData.track" data-ng-change="addTrack(formData.track)">
-                    <option data-ng-repeat="item in tracks | orderBy: 'name'" value="{{item.id}}"> {{item.name}}</option>
+                <select data-ng-model="formData.track"
+                        data-ng-options="item.name for item in tracks  | orderBy: 'name'"
+                        data-ng-change="addTrack(formData.track)">
+
                 </select>
             </th>
             </thead>
             <tbody>
             <tr data-ng-repeat="item in trackListNames">
-                <td>{{item.name}}</td>
-                <td><button data-ng-click="removeItem(item , 'tracks')">X</button></td>
+                <td data-ng-hide="item.value">{{item.name}}</td>
+                <td data-ng-hide="item.value"><button data-ng-click="removeItem(item , 'tracks')">X</button></td>
             </tr>
             </tbody>
         </table>
@@ -48,7 +51,7 @@
     </div>
 
     <div class="col-md-4">
-        <button class="btn btn-block btn-success" style="display:block" data-ng-click="getSeries()">Search</button>
+        <button class="btn btn-block btn-success" style="display:block" data-ng-click="getSelected()">Search</button>
         <button class="btn btn-block btn-success" style="display:block" data-ng-click="addFreeCars()">Add free cars</button>
         <button class="btn btn-block btn-success" style="display:block" data-ng-click="addFreeTracks()">Add free tracks</button>
         <button class="btn btn-block btn-warning" data-ng-click="clearAll()">Clear all</button>
@@ -63,15 +66,17 @@
                 <thead>
                 <th>
                     Series
-                    <select data-ng-model="formData.series" data-ng-change="addSeries(formData.series)">
-                        <option data-ng-repeat="item in series  | orderBy: 'name'" value="{{item.id}}"> {{item.name}}</option>
+                    <select data-ng-model="formData.series"
+                            data-ng-options="item.name for item in series | orderBy: 'name'"
+                            data-ng-change="addSeries(formData.series)">
+
                     </select>
                 </th>
                 </thead>
                 <tbody>
                 <tr data-ng-repeat="item in seriesListNames">
-                    <td>{{item.name}}</td>
-                    <td><button data-ng-click="removeItem(item, 'series')">X</button></td>
+                    <td data-ng-hide="item.value">{{item.name}}</td>
+                    <td data-ng-hide="item.value"><button data-ng-click="removeItem(item, 'series')">X</button></td>
                 </tr>
                 </tbody>
             </table>
@@ -140,27 +145,82 @@
 
 
 <div class="col-md-12">
+    <form>
+        <div class="form-group" data-ng-if="result">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" placeholder="Search in table" data-ng-model="filter.searchValue">
+            </div>
+        </div>
+    </form>
+    {{searchValue}}
     <table class="table table-striped" data-ng-if="result.length > 0">
         <thead>
-            <th>Type</th>
-            <th>Class</th>
-            <th>Car</th>
-            <th>Series</th>
-            <th>Start Date</th>
-            <th>End Date</th>
-            <th>Track</th>
-            <th>Type</th>
+            <th>
+                <a href="" data-ng-click="sortType = 'type'; sortReverse = !sortReverse">
+                    Type
+                    <span data-ng-show="sortType == 'type' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span data-ng-show="sortType == 'type' && sortReverse" class="fa fa-caret-up"></span>
+                    </a>
+            </th>
+            <th><a href="" data-ng-click="sortType = 'class'; sortReverse = !sortReverse">
+                Class
+                <span data-ng-show="sortType == 'class' && !sortReverse" class="fa fa-caret-down"></span>
+                <span data-ng-show="sortType == 'class' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+            </th>
+            <th>
+                <a href="" data-ng-click="sortType = 'car'; sortReverse = !sortReverse">
+                    Car
+                    <span data-ng-show="sortType == 'car' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span data-ng-show="sortType == 'car' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="" data-ng-click="sortType = 'series'; sortReverse = !sortReverse">
+                    Series
+                    <span data-ng-show="sortType == 'series' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span data-ng-show="sortType == 'series' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="" data-ng-click="sortType = 'start_date'; sortReverse = !sortReverse">
+                    Start date
+                    <span data-ng-show="sortType == 'start_date' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span data-ng-show="sortType == 'start_date' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="" data-ng-click="sortType = 'end_date'; sortReverse = !sortReverse">
+                    End date
+                    <span data-ng-show="sortType == 'end_date' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span data-ng-show="sortType == 'end_date' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th>
+                <a href="" data-ng-click="sortType = 'track'; sortReverse = !sortReverse">
+                    Track
+                    <span data-ng-show="sortType == 'track' && !sortReverse" class="fa fa-caret-down"></span>
+                    <span data-ng-show="sortType == 'track' && sortReverse" class="fa fa-caret-up"></span>
+                </a>
+            </th>
+            <th><a href="" data-ng-click="sortType = 'official_type'; sortReverse = !sortReverse">
+                Type
+                <span data-ng-show="sortType == 'official_type' && !sortReverse" class="fa fa-caret-down"></span>
+                <span data-ng-show="sortType == 'official_type' && sortReverse" class="fa fa-caret-up"></span>
+            </a>
+            </th>
         </thead>
         <tbody>
-            <tr data-ng-repeat="item in result track by $index">
-                <td>{{item.type}}</td>
-                <td>{{item.class}}</td>
-                <td>{{item.car}}</td>
-                <td>{{item.series}}</td>
-                <td>{{item.start_date}}</td>
-                <td>{{item.end_date}}</td>
-                <td>{{item.track}}</td>
-                <td>{{item.official_type}}</td>
+            <tr data-ng-repeat="item in result | orderBy:sortType:sortReverse | filter: filter.searchValue ">
+                <td style="width:5%">{{item.type}}</td>
+                <td style="width:5%">{{item.class}}</td>
+                <td style="width:22%">{{item.car}}</td>
+                <td style="width:21%">{{item.series}}</td>
+                <td style="width:10%">{{item.start_date}}</td>
+                <td style="width:10%">{{item.end_date}}</td>
+                <td style="width:22%">{{item.track}}</td>
+                <td style="width:10%">{{item.official_type}}</td>
             </tr>
         </tbody>
     </table>
