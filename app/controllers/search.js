@@ -12,17 +12,15 @@ angular.module('myApp.search', ['ngRoute'])
     .controller('searchCtrl', ['$scope', '$http', 'dataService', 'trackService', 'seriesService', 'carService', function
         ($scope, $http, dataService, trackService, seriesService, carService) {
 
+        var selectedItems = [];
+        // List all the filter values
+        var filterList = [];
         // Array for the ListNames
         $scope.lists = {};
 
         $scope.carListNames = [];
         $scope.trackListNames = [];
         $scope.seriesListNames = [];
-
-        $scope.carListNames.push({value: "car"});
-        $scope.trackListNames.push({value: "track"});
-        $scope.seriesListNames.push({value: "series"});
-
 
         $scope.races = dataService.getData();
         $scope.cars = carService.getData();
@@ -77,8 +75,8 @@ angular.module('myApp.search', ['ngRoute'])
             var item = angular.copy(data);
             if ($scope.lists.classList.indexOf(item) == -1) {
                 $scope.lists.classList.push(item);
-                $scope.formData.class = {};
             }
+            $scope.formData.class = {};
         };
 
         /**
@@ -97,7 +95,7 @@ angular.module('myApp.search', ['ngRoute'])
             });
             freeCars.forEach(function (car){
                 $scope.carListNames.push(car);
-            })
+                })
             };
 
 
@@ -127,91 +125,85 @@ angular.module('myApp.search', ['ngRoute'])
         };
 
         /**
+         * Throw together all selected item names
+         */
+        $scope.getSelected = function (){
+            selectedItems = [];
+            // List all the filter values
+            filterList = [];
+
+            if ($scope.carListNames.length >= 1){
+                $scope.carListNames.forEach(function (item){
+                    if(selectedItems.indexOf(item) === -1){
+                        selectedItems.push(item.name);
+                        if (filterList.indexOf("car") === -1){
+                            filterList.push("car");
+                        }
+                    }
+                })
+            }
+            if ($scope.trackListNames.length >= 1){
+                $scope.trackListNames.forEach(function (item){
+                    if(selectedItems.indexOf(item) === -1){
+                        selectedItems.push(item.name);
+                       if (filterList.indexOf("track") === -1) {
+                           filterList.push("track");
+                       }
+                    }
+                })
+            }
+            if ($scope.seriesListNames.length >= 1){
+                $scope.seriesListNames.forEach(function (item){
+                    if(selectedItems.indexOf(item) === -1){
+                        selectedItems.push(item.name);
+                        if (filterList.indexOf("series") === -1){
+                            filterList.push("series");
+                        }
+                    }
+                })
+            }
+            console.log(filterList);
+            $scope.getSeries(selectedItems);
+        };
+
+        /**
          * Take the selected cars, tracks , series and class and create the query
          */
-        $scope.getSeries = function () {
-            var foundItems = [];
-            var resultItems = [];
-            var filteredItems = [];
-
-            $scope.lists.cars = angular.copy($scope.carListNames);
-            $scope.lists.tracks = angular.copy($scope.trackListNames);
-            $scope.lists.series = angular.copy($scope.seriesListNames);
-
-            _.each($scope.lists, function(array){
-                array.forEach(function(selected){
-                    if (selected.name) {
-                        console.log(selected);
-                        var item = _.filter($scope.races, function (list) {
-                            if (array[0].value !== undefined) {
-                                return list[array[0].value] == selected.name;
-                            }
-                        });
-                        foundItems.push(item);
-                    }
-                });
-
+        $scope.getSeries = function (selected) {
+            // Gets all the races with the selectedItems
+            $scope.result = _.filter($scope.races, function (item){
+                return  selected.indexOf(item.car) >= 0 ||
+                        selected.indexOf(item.track) >= 0 ||
+                        selected.indexOf(item.series) >= 0;
             });
-            foundItems = _.uniq([].concat.apply([],foundItems));
-            console.log(foundItems);
 
-            $scope.result = foundItems;
-
-            /**
-            _.each($scope.lists, function(array){
-                array.forEach(function(selected){
-                    var item = _.filter($scope.result, function(list){
-                        if(array[0].value !== undefined && selected.name) {
-                            console.log(selected.name);
-                            return list[array[0].value] == selected.name;
-                        }
-                    });
-                    resultItems.push(item);
-                    //console.log(resultItems);
-                });
-                filteredItems = _.uniq([].concat.apply([], resultItems));
-
-            });
-            console.log(filteredItems);
-            $scope.result = _.uniq([].concat.apply([], filteredItems));
-
-             **/
-            /**
-
-            var list = [];
-            // If any of the found arrays are filled
-            if (foundCars.length > 0) {
-                // Only iterate the amount of selected cars
-                $scope.carListNames.forEach(function (item) {
-                    var car = _.filter($scope.result, function (list) {
-                        return list.car == item.name
-                    });
-                    list.push(car);
-                });
-                // Concatenate the multi dimensional arrays and remove duplicate entries
-                $scope.result = _.uniq([].concat.apply([], list));
+            if (filterList.length === 1){
+                $scope.result = _.filter($scope.result, function (item){
+                    // Filter list by the first item in filterList(car, track or series)
+                    return  selectedItems.indexOf(item[filterList[0]]) >= 0;
+                })
             }
-            if (foundTracks.length > 0) {
-                list = [];
-                $scope.trackListNames.forEach(function (item) {
-                    var track = _.filter($scope.result, function (list) {
-                        return list.track == item.name
-                    });
-                    list.push(track);
-                });
-                $scope.result = _.uniq([].concat.apply([], list));
+
+            if (filterList.length === 2){
+                $scope.result = _.filter($scope.result, function (item){
+                    // Filter list by the first item in filterList(car, track or series)
+                    return  selectedItems.indexOf(item[filterList[0]]) >= 0 &&
+                            selectedItems.indexOf(item[filterList[1]]) >= 0
+                })
             }
-            // If series are also selected
-            if (foundSeries.length > 0) {
-                list = [];
-                $scope.seriesListNames.forEach(function (item) {
-                    var series = _.filter($scope.result, function (list) {
-                        return list.series == item.name
-                    });
-                    list.push(series);
-                });
-                $scope.result = _.uniq([].concat.apply([], list));
+
+            if (filterList.length === 3){
+                $scope.result = _.filter($scope.result, function (item){
+                    // Filter list by the first item in filterList(car, track or series)
+                    return  selectedItems.indexOf(item[filterList[0]]) >= 0 &&
+                            selectedItems.indexOf(item[filterList[1]]) >= 0 &&
+                            selectedItems.indexOf(item[filterList[2]]) >= 0
+                })
             }
+            console.log($scope.result);
+
+
+          /**
             // If class is also selected
             if ($scope.lists.classList.length > 0) {
                 list = [];

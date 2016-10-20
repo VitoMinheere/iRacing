@@ -51,7 +51,7 @@
     </div>
 
     <div class="col-md-4">
-        <button class="btn btn-block btn-success" style="display:block" data-ng-click="getSeries()">Search</button>
+        <button class="btn btn-block btn-success" style="display:block" data-ng-click="getSelected()">Search</button>
         <button class="btn btn-block btn-success" style="display:block" data-ng-click="addFreeCars()">Add free cars</button>
         <button class="btn btn-block btn-success" style="display:block" data-ng-click="addFreeTracks()">Add free tracks</button>
         <button class="btn btn-block btn-warning" data-ng-click="clearAll()">Clear all</button>
@@ -215,11 +215,11 @@
             <tr data-ng-repeat="item in result | orderBy:sortType:sortReverse | filter: filter.searchValue ">
                 <td style="width:5%">{{item.type}}</td>
                 <td style="width:5%">{{item.class}}</td>
-                <td style="width:25%">{{item.car}}</td>
-                <td style="width:15%">{{item.series}}</td>
+                <td style="width:22%">{{item.car}}</td>
+                <td style="width:21%">{{item.series}}</td>
                 <td style="width:10%">{{item.start_date}}</td>
                 <td style="width:10%">{{item.end_date}}</td>
-                <td style="width:25%">{{item.track}}</td>
+                <td style="width:22%">{{item.track}}</td>
                 <td style="width:10%">{{item.official_type}}</td>
             </tr>
         </tbody>
