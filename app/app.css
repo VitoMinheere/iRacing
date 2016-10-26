@@ -57,3 +57,11 @@
 .timepicker.dropdown-menu tbody button {
   padding: 6px;
 }
+
+.same {
+  background-color: green;
+}
+
+.different {
+  background-color: inherit;
+}

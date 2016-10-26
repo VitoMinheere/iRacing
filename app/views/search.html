@@ -154,7 +154,7 @@
         </div>
     </form>
     {{searchValue}}
-    <table class="table table-striped" data-ng-if="result.length > 0">
+    <table class="table " data-ng-if="result.length > 0">
         <thead>
             <th>
                 <a href="" data-ng-click="sortType = 'type'; sortReverse = !sortReverse">
@@ -212,7 +212,10 @@
             </th>
         </thead>
         <tbody>
-            <tr data-ng-repeat="item in result | orderBy:sortType:sortReverse | filter: filter.searchValue ">
+            <tr data-ng-repeat="item in result | orderBy:sortType:sortReverse | filter: filter.searchValue "
+                data-ng-click="filterRows(item);"
+                data-ng-class="checkIfSame(item) ? 'same' : 'different'"
+            >
                 <td style="width:5%">{{item.type}}</td>
                 <td style="width:5%">{{item.class}}</td>
                 <td style="width:22%">{{item.car}}</td>
