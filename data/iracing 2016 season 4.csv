@@ -1,0 +1,37 @@
+id;type;class;car;series;date;track;official_type
+1;Road;Rookie;47;Global Mazda MX-5 Cup;2016-09-13;Summit Point Raceway;official
+2;Road;Rookie;47;Global Mazda MX-5 Cup;2016-09-20;Okayama;official
+3;Road;Rookie;47;Global Mazda MX-5 Cup;2016-09-27;Lime Rock  Park;official
+4;Road;Rookie;47;Global Mazda MX-5 Cup;2016-10-04;Mazda raceway Laguna Seca;official
+5;Road;Rookie;47;Global Mazda MX-5 Cup;2016-10-11;Summit Point;official
+6;Road;Rookie;47;Global Mazda MX-5 Cup;2016-10-18;charlotte speedway;official
+7;Road;Rookie;47;Global Mazda MX-5 Cup;2016-10-25;phoenix raceway ;official
+8;Road;Rookie;47;Global Mazda MX-5 Cup;2016-11-01;okayama ;official
+9;Road;Rookie;47;Global Mazda MX-5 Cup;2016-11-08;Lime Rock  Park;official
+10;Road;Rookie;47;Global Mazda MX-5 Cup;2016-11-15;Summit Point Raceway;official
+11;Road;Rookie;47;Global Mazda MX-5 Cup;2016-11-22;Okayama ;official
+12;Road;Rookie;47;Global Mazda MX-5 Cup;2016-11-29;Mazda raceway Laguna Seca;official
+13;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-09-13;Okayama;official
+14;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-09-20;Summit Point Raceway;official
+15;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-09-27;Charlotte;official
+16;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-10-04;Summit Point;official
+17;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-10-11;Lime rock park;official
+18;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-10-18;Mazda raceway Laguna Seca;official
+19;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-10-25;Okayama;official
+20;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-11-01;Summit Point Raceway;official
+21;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-11-08;phoenix raceway ;official
+22;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-11-15;Summit Point;official
+23;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-11-22;Lime rock Park;official
+24;Road;Rookie;47 , 49;iRacing Production Car Challenge;2016-11-29;Daytona 2007;official
+25;Road;D;51;Cadillac Cup;2016-09-13;Lime Rock Park;official
+26;Road;D;51;Cadillac Cup;2016-09-20;Nurburgring Nordschleife;official
+27;Road;D;51;Cadillac Cup;2016-09-27;Road Atlanta;official
+28;Road;D;51;Cadillac Cup;2016-10-04;Summit Point Motorsports Park;official
+29;Road;D;51;Cadillac Cup;2016-10-11;Circuit Spa-francorchamps;official
+30;Road;D;51;Cadillac Cup;2016-10-18;Circuit park Zandvoort;official
+31;Road;D;51;Cadillac Cup;2016-10-25;Daytona;official
+32;Road;D;51;Cadillac Cup;2016-11-01;Mid-ohio Sports Car Course;official
+33;Road;D;51;Cadillac Cup;2016-11-08;Road America;official
+34;Road;D;51;Cadillac Cup;2016-11-15;Nurburgring GP;official
+35;Road;D;51;Cadillac Cup;2016-11-22;Mazda raceway Laguna Seca;official
+36;Road;D;51;Cadillac Cup;2016-11-29;Circuit de la Sarthe;official
